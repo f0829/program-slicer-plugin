@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Program-Slicer-Plugin
+Bundle-SymbolicName: Program-Slicer-Plugin;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: program_slicer_plugin.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: Program-Slicer-Plugin
+Bundle-ActivationPolicy: lazy
