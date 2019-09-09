@@ -13,12 +13,25 @@
             name="Sample Command"
             id="Program-Slicer-Plugin.commands.sampleCommand">
       </command>
+      <category
+            id="Program-Slicer-Plugin.commands.slicingCategory"
+            name="Slicing Category">
+      </category>
+      <command
+            categoryId="Program-Slicer-Plugin.commands.slicingCategory"
+            id="Program-Slicer-Plugin.commands.backwardSliceCommand"
+            name="Backward Slice">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
             class="programslicerplugin.handlers.SampleHandler"
             commandId="Program-Slicer-Plugin.commands.sampleCommand">
+      </handler>
+      <handler
+            class="programslicerplugin.handlers.BackwardSliceHandler"
+            commandId="Program-Slicer-Plugin.commands.backwardSliceCommand">
       </handler>
    </extension>
    <extension
@@ -28,6 +41,12 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             contextId="org.eclipse.ui.contexts.window"
             sequence="M1+6">
+      </key>
+      <key
+            commandId="Program-Slicer-Plugin.commands.backwardSliceCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+4">
       </key>
    </extension>
    <extension
@@ -54,6 +73,33 @@
                   commandId="Program-Slicer-Plugin.commands.sampleCommand"
                   icon="icons/sample.png"
                   tooltip="Say hello world">
+            </command>
+         </toolbar>
+      </menuContribution>
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               id="Program-Slicer-Plugin.menus.slicingMenu"
+               label="Slicing Menu"
+               mnemonic="S">
+            <command
+                  commandId="Program-Slicer-Plugin.commands.backwardSliceCommand"
+                  icon="icons/up-16.png"
+                  id="Program-Slicer-Plugin.menus.backwardSliceCommand"
+                  mnemonic="B"
+                  tooltip="Backward Slice">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="Program-Slicer-Plugin.toolbars.slicingToolbar">
+            <command
+                  commandId="Program-Slicer-Plugin.commands.backwardSliceCommand"
+                  icon="icons/up-16.png"
+                  id="Program-Slicer-Plugin.toolbars.backwardSliceCommand"
+                  tooltip="Backward Slice">
             </command>
          </toolbar>
       </menuContribution>
