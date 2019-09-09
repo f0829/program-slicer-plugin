@@ -22,6 +22,11 @@
             id="Program-Slicer-Plugin.commands.backwardSliceCommand"
             name="Backward Slice">
       </command>
+      <command
+            categoryId="Program-Slicer-Plugin.commands.slicingCategory"
+            id="Program-Slicer-Plugin.commands.forwardSliceCommand"
+            name="Forward Slice">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -32,6 +37,10 @@
       <handler
             class="programslicerplugin.handlers.BackwardSliceHandler"
             commandId="Program-Slicer-Plugin.commands.backwardSliceCommand">
+      </handler>
+      <handler
+            class="programslicerplugin.handlers.ForwardSliceHandler"
+            commandId="Program-Slicer-Plugin.commands.forwardSliceCommand">
       </handler>
    </extension>
    <extension
@@ -47,6 +56,12 @@
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+4">
+      </key>
+      <key
+            commandId="Program-Slicer-Plugin.commands.forwardSliceCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+0">
       </key>
    </extension>
    <extension
@@ -89,6 +104,13 @@
                   mnemonic="B"
                   tooltip="Backward Slice">
             </command>
+            <command
+                  commandId="Program-Slicer-Plugin.commands.forwardSliceCommand"
+                  icon="icons/down-16.png"
+                  id="Program-Slicer-Plugin.menus.forwardSliceCommand"
+                  mnemonic="F"
+                  tooltip="Forward Slice">
+            </command>
          </menu>
       </menuContribution>
       <menuContribution
@@ -100,6 +122,12 @@
                   icon="icons/up-16.png"
                   id="Program-Slicer-Plugin.toolbars.backwardSliceCommand"
                   tooltip="Backward Slice">
+            </command>
+            <command
+                  commandId="Program-Slicer-Plugin.commands.forwardSliceCommand"
+                  icon="icons/down-16.png"
+                  id="Program-Slicer-Plugin.toolbars.forwardSliceCommand"
+                  tooltip="Forward Slice">
             </command>
          </toolbar>
       </menuContribution>
