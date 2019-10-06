@@ -24,7 +24,6 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
-
 import understand.AnalyzeUnderstand;
 import understand.CFG;
 import understand.CFGNode;
@@ -37,8 +36,18 @@ import understand.WriteLinesToFile;
 
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.ITextOperationTarget;
+import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 
 public class BackwardSliceHandler extends AbstractHandler {
 
@@ -115,7 +124,16 @@ public class BackwardSliceHandler extends AbstractHandler {
 			Slicing backwardSlicing = new MySlicing(cfg, variableUsages);
 
 			HashSet<CFGNode> cfgnodes = backwardSlicing.getSlicedNode(line.intValue());
-
+			
+			ITextViewer viewer = (ITextViewer) iPart.getAdapter(ITextOperationTarget.class);
+			StyledText styledText = viewer.getTextWidget();
+			
+			Display display = Display.getDefault();
+			StyleRange style = new StyleRange();
+			style.borderColor = display.getSystemColor(SWT.COLOR_RED);
+			style.borderStyle = SWT.BORDER_SOLID;
+			StyleRange[] styles = {style};
+					
 			for (Iterator<CFGNode> iterator2 = cfgnodes.iterator(); iterator2.hasNext();) {
 				CFGNode cfgNode = (CFGNode) iterator2.next();
 //				System.out.println("Backward Slice result");
@@ -123,31 +141,23 @@ public class BackwardSliceHandler extends AbstractHandler {
 //				System.out.println("End: " + cfgNode.getLineEnd());
 
 				for (int i = cfgNode.getLineStart(); i <= cfgNode.getLineEnd(); i++) {
-					slicedLines.add(lines.get(i - 1));
+					
+					
+					try {
+						IRegion lineInfo = document.getLineInformation(i-1);
+						styledText.setStyleRanges(0, 0, new int[] {lineInfo.getOffset(),lineInfo.getLength()}, styles);
+					} catch (BadLocationException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					
+					
 				}
 
 			}
 
-			String slicedFile = sourceDir + File.separator + "sliced" + timestamp + sourceFile.getName();
-			WriteLinesToFile.writeLinesToFile(slicedLines, slicedFile);
-
 			MessageDialog.openInformation(window.getShell(), "Program Slicing", "Slicing Complete");
 
-			File file = new File(slicedFile);
-			IFileStore fileStore = null;
-			try {
-				fileStore = EFS.getStore(file.toURI());
-			} catch (CoreException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
-			try {
-				IDE.openEditorOnFileStore(iPage, fileStore);
-			} catch (PartInitException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 
 		}
 		return null;
