@@ -123,7 +123,10 @@ public class ForwardSliceHandler extends AbstractHandler {
 
 			Display display = Display.getDefault();
 			StyleRange style = new StyleRange();
-			style.borderColor = display.getSystemColor(SWT.COLOR_RED);
+			style.background = display.getSystemColor(SWT.COLOR_DARK_GRAY);
+			style.foreground = display.getSystemColor(SWT.COLOR_YELLOW);
+			style.fontStyle = SWT.BOLD;
+			style.borderColor = display.getSystemColor(SWT.COLOR_WHITE);
 			style.borderStyle = SWT.BORDER_SOLID;
 			StyleRange[] styles = { style };
 
