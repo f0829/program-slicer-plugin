@@ -45,6 +45,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -130,7 +131,10 @@ public class BackwardSliceHandler extends AbstractHandler {
 			
 			Display display = Display.getDefault();
 			StyleRange style = new StyleRange();
-			style.borderColor = display.getSystemColor(SWT.COLOR_RED);
+			style.background = display.getSystemColor(SWT.COLOR_DARK_GRAY);
+			style.foreground = display.getSystemColor(SWT.COLOR_GREEN);
+			style.fontStyle = SWT.BOLD;
+			style.borderColor = display.getSystemColor(SWT.COLOR_WHITE);
 			style.borderStyle = SWT.BORDER_SOLID;
 			StyleRange[] styles = {style};
 					
