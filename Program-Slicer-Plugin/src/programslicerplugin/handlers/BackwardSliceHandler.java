@@ -1,39 +1,28 @@
 package programslicerplugin.handlers;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.ide.FileStoreEditorInput;
-import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import understand.AnalyzeUnderstand;
 import understand.CFG;
 import understand.CFGNode;
-import understand.FileToLines;
 import understand.MySlicing;
 import understand.Slicing;
 import understand.UnderstandJavaSourceFiles;
 import understand.VariableUsage;
-import understand.WriteLinesToFile;
-
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
@@ -45,10 +34,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 
 public class BackwardSliceHandler extends AbstractHandler {
 
@@ -116,10 +102,6 @@ public class BackwardSliceHandler extends AbstractHandler {
 				e.printStackTrace();
 			}
 
-			List<String> lines = FileToLines.fileToLines(sourceFile.getAbsolutePath());
-
-			List<String> slicedLines = new ArrayList<String>();
-
 			CFG cfg = AnalyzeUnderstand.reloadCFG(cfgFile);
 			Collection<VariableUsage> variableUsages = AnalyzeUnderstand.reloadVariableUsage(useFile);
 			Slicing backwardSlicing = new MySlicing(cfg, variableUsages);
@@ -140,9 +122,6 @@ public class BackwardSliceHandler extends AbstractHandler {
 					
 			for (Iterator<CFGNode> iterator2 = cfgnodes.iterator(); iterator2.hasNext();) {
 				CFGNode cfgNode = (CFGNode) iterator2.next();
-//				System.out.println("Backward Slice result");
-//				System.out.println("Start: " + cfgNode.getLineStart());
-//				System.out.println("End: " + cfgNode.getLineEnd());
 
 				for (int i = cfgNode.getLineStart(); i <= cfgNode.getLineEnd(); i++) {
 					

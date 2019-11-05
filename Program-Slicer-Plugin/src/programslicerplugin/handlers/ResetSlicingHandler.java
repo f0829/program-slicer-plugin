@@ -32,24 +32,11 @@ public class ResetSlicingHandler extends AbstractHandler {
 		IDocumentProvider iDocumentProvider = iTextEditor.getDocumentProvider();
 		IDocument document = iDocumentProvider.getDocument(input);
 		
-		MessageDialog.openInformation(window.getShell(), "Program-Slicer-Plugin",
-				"Hello! This plugin is for program slicing.");
-		
 		ITextViewer viewer = (ITextViewer) iPart.getAdapter(ITextOperationTarget.class);
 		
 		StyledText styledText = viewer.getTextWidget();
-		
-		Display display = Display.getDefault();
 		StyleRange style = new StyleRange();
-//		style.background = display.getSystemColor(SWT.COLOR_DARK_GRAY);
-//		style.foreground = display.getSystemColor(SWT.COLOR_GREEN);
-//		style.fontStyle = SWT.BOLD;
-//		style.borderColor = display.getSystemColor(SWT.COLOR_WHITE);
-//		style.borderStyle = SWT.BORDER_SOLID;
 		StyleRange[] styles = {style};
-		
-		
-		
 		styledText.setStyleRanges(0, 0, new int[] {0,document.getLength()}, styles);
 
 		

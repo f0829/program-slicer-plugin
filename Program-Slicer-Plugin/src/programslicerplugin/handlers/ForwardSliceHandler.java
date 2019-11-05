@@ -1,13 +1,10 @@
 package programslicerplugin.handlers;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -24,8 +21,6 @@ import understand.AnalyzeUnderstand;
 import understand.CFG;
 import understand.CFGNode;
 import understand.FSlicing;
-import understand.FileToLines;
-import understand.MySlicing;
 import understand.Slicing;
 import understand.UnderstandJavaSourceFiles;
 import understand.VariableUsage;
@@ -108,10 +103,6 @@ public class ForwardSliceHandler extends AbstractHandler {
 				e.printStackTrace();
 			}
 
-			List<String> lines = FileToLines.fileToLines(sourceFile.getAbsolutePath());
-
-			List<String> slicedLines = new ArrayList<String>();
-
 			CFG cfg = AnalyzeUnderstand.reloadCFG(cfgFile);
 			Collection<VariableUsage> variableUsages = AnalyzeUnderstand.reloadVariableUsage(useFile);
 			Slicing forwardSlicing = new FSlicing(cfg, variableUsages);
@@ -132,9 +123,6 @@ public class ForwardSliceHandler extends AbstractHandler {
 
 			for (Iterator<CFGNode> iterator2 = cfgnodes.iterator(); iterator2.hasNext();) {
 				CFGNode cfgNode = (CFGNode) iterator2.next();
-//				System.out.println("Backward Slice result");
-//				System.out.println("Start: " + cfgNode.getLineStart());
-//				System.out.println("End: " + cfgNode.getLineEnd());
 
 				for (int i = cfgNode.getLineStart(); i <= cfgNode.getLineEnd(); i++) {
 
