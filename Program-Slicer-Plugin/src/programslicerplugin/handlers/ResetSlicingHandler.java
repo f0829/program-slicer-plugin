@@ -10,6 +10,9 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
+
+import programslicerplugin.configs.DefaultStyle;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextOperationTarget;
@@ -27,18 +30,11 @@ public class ResetSlicingHandler extends AbstractHandler {
 		
 		IWorkbenchPage iPage = window.getActivePage();
 		IEditorPart iPart = iPage.getActiveEditor();
-		IEditorInput input = iPart.getEditorInput();
-		ITextEditor iTextEditor = (ITextEditor) iPage.getActiveEditor();
-		IDocumentProvider iDocumentProvider = iTextEditor.getDocumentProvider();
-		IDocument document = iDocumentProvider.getDocument(input);
 		
 		ITextViewer viewer = (ITextViewer) iPart.getAdapter(ITextOperationTarget.class);
 		
 		StyledText styledText = viewer.getTextWidget();
-		StyleRange style = new StyleRange();
-		StyleRange[] styles = {style};
-		styledText.setStyleRanges(0, 0, new int[] {0,document.getLength()}, styles);
-
+		styledText.setStyleRanges(DefaultStyle.DEFAULTSTYLEDTEXTRANGES);
 		
 		return null;
 	}

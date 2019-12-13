@@ -16,6 +16,8 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
+
+import programslicerplugin.configs.DefaultStyle;
 import understand.AnalyzeUnderstand;
 import understand.CFG;
 import understand.CFGNode;
@@ -110,6 +112,7 @@ public class BackwardSliceHandler extends AbstractHandler {
 			
 			ITextViewer viewer = (ITextViewer) iPart.getAdapter(ITextOperationTarget.class);
 			StyledText styledText = viewer.getTextWidget();
+			DefaultStyle.DEFAULTSTYLEDTEXTRANGES = styledText.getStyleRanges();
 			
 			Display display = Display.getDefault();
 			StyleRange style = new StyleRange();
