@@ -14,6 +14,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.ide.FileStoreEditorInput;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
@@ -49,8 +50,15 @@ public class ForwardSliceHandler extends AbstractHandler {
 		IEditorPart iPart = iPage.getActiveEditor();
 		IEditorInput input = iPart.getEditorInput();
 
-		FileStoreEditorInput fStoreEditorInput = input.getAdapter(FileStoreEditorInput.class);
-		String pathname = fStoreEditorInput.getURI().getPath();
+		String pathname = null;
+		
+		if(input instanceof FileStoreEditorInput) {
+			FileStoreEditorInput fStoreEditorInput = input.getAdapter(FileStoreEditorInput.class);
+			pathname = fStoreEditorInput.getURI().getPath();
+		} else if (input instanceof FileEditorInput) {
+			FileEditorInput fEditorInput = input.getAdapter(FileEditorInput.class);
+			pathname = fEditorInput.getURI().getPath();
+		}
 
 		InputDialog inputDialog = new InputDialog(window.getShell(), "Program Slicing", "Enter slicing line number",
 				null, null);
