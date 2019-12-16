@@ -1,12 +1,7 @@
 package programslicerplugin.handlers;
 
-import java.io.File;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
-
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -22,16 +17,10 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import programslicerplugin.configs.DefaultStyle;
-import understand.AnalyzeUnderstand;
-import understand.CFG;
-import understand.CFGNode;
-import understand.MySlicing;
-import understand.Slicing;
-import understand.UnderstandJavaSourceFiles;
-import understand.VariableUsage;
+import slicer.Criterion;
+import slicer.Slicer;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextOperationTarget;
@@ -75,51 +64,25 @@ public class BackwardSliceHandler extends AbstractHandler {
 				MessageDialog.openError(window.getShell(), "Error", "Invalid line number");
 				return null;
 			}
-
-			File sourceFile = new File(pathname);
-			String sourceDir = sourceFile.getParent();
-
-			System.out.println("The following file is selected:");
-			System.out.println(sourceFile);
-			String timestamp = String.valueOf(new Date().getTime());
-
-			String udbFile = sourceDir + File.separator + sourceFile.getName() + timestamp + ".udb";
-			String useFile = sourceDir + File.separator + sourceFile.getName() + timestamp + ".use";
-			String cfgFile = sourceDir + File.separator + sourceFile.getName() + timestamp + ".cfg";
-
-			File indexFile = new File(udbFile);
 			
+			List<Integer> slicedLines = null;
+
+			try {
+				Slicer slicer = new Slicer();
+				HashSet<String> variableSet = new HashSet<>();
+				variableSet.add("product");
+				
+				Criterion criterion = new Criterion(line, variableSet);
+				slicedLines = slicer.getBackwardSlice(pathname, criterion);
+			} catch (Exception e) {
+				// TODO: handle exception
+				MessageDialog.openError(window.getShell(), "Error", "Internal Error Occured");
+			}
 			
-			if (!indexFile.exists()) {
-				try {
-					UnderstandJavaSourceFiles.createAnalysisDB(sourceFile, udbFile);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} else {
-				System.out.println("Filename already exists. Exiting...");
+			if (slicedLines == null) {
+				MessageDialog.openError(window.getShell(), "Error", "Internal Error Occured");
+				return null;
 			}
-			indexFile = new File(cfgFile);
-			try {
-				AnalyzeUnderstand.extractCFG(udbFile, cfgFile);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			indexFile = new File(useFile);
-			try {
-				AnalyzeUnderstand.extractVariableUse(udbFile, useFile);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			CFG cfg = AnalyzeUnderstand.reloadCFG(cfgFile);
-			Collection<VariableUsage> variableUsages = AnalyzeUnderstand.reloadVariableUsage(useFile);
-			Slicing backwardSlicing = new MySlicing(cfg, variableUsages);
-
-			HashSet<CFGNode> cfgnodes = backwardSlicing.getSlicedNode(line.intValue());
 			
 			ITextViewer viewer = (ITextViewer) iPart.getAdapter(ITextOperationTarget.class);
 			StyledText styledText = viewer.getTextWidget();
@@ -133,24 +96,17 @@ public class BackwardSliceHandler extends AbstractHandler {
 			style.borderColor = display.getSystemColor(SWT.COLOR_WHITE);
 			style.borderStyle = SWT.BORDER_SOLID;
 			StyleRange[] styles = {style};
-					
-			for (Iterator<CFGNode> iterator2 = cfgnodes.iterator(); iterator2.hasNext();) {
-				CFGNode cfgNode = (CFGNode) iterator2.next();
+			
+			for (Integer lineNum : slicedLines) {
+				try {
+					IRegion lineInfo = document.getLineInformation(lineNum-1);
+					styledText.setStyleRanges(0, 0, new int[] {lineInfo.getOffset(),lineInfo.getLength()}, styles);
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+					MessageDialog.openError(window.getShell(), "Error", "Internal Error Occured");
 
-				for (int i = cfgNode.getLineStart(); i <= cfgNode.getLineEnd(); i++) {
-					
-					
-					try {
-						IRegion lineInfo = document.getLineInformation(i-1);
-						styledText.setStyleRanges(0, 0, new int[] {lineInfo.getOffset(),lineInfo.getLength()}, styles);
-					} catch (BadLocationException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-					
-					
 				}
-
 			}
 
 			MessageDialog.openInformation(window.getShell(), "Program Slicing", "Slicing Complete");
