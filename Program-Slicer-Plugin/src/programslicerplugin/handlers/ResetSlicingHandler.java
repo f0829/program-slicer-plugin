@@ -18,15 +18,17 @@ public class ResetSlicingHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-		
+
 		IWorkbenchPage iPage = window.getActivePage();
 		IEditorPart iPart = iPage.getActiveEditor();
-		
+
 		ITextViewer viewer = (ITextViewer) iPart.getAdapter(ITextOperationTarget.class);
-		
+
 		StyledText styledText = viewer.getTextWidget();
-		styledText.setStyleRanges(DefaultStyle.DEFAULTSTYLEDTEXTRANGES);
-		
+		if (DefaultStyle.DEFAULTSTYLEDTEXTRANGES != null) {
+			styledText.setStyleRanges(DefaultStyle.DEFAULTSTYLEDTEXTRANGES);
+		}
+
 		return null;
 	}
 }

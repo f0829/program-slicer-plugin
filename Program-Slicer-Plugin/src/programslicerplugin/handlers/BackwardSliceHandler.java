@@ -144,7 +144,11 @@ public class BackwardSliceHandler extends AbstractHandler {
 
 		ITextViewer viewer = (ITextViewer) iPart.getAdapter(ITextOperationTarget.class);
 		StyledText styledText = viewer.getTextWidget();
-		DefaultStyle.DEFAULTSTYLEDTEXTRANGES = styledText.getStyleRanges();
+		
+		if (DefaultStyle.DEFAULTSTYLEDTEXTRANGES == null) {
+			DefaultStyle.DEFAULTSTYLEDTEXTRANGES = styledText.getStyleRanges();
+		}
+		
 
 		Display display = Display.getDefault();
 		StyleRange style = new StyleRange();
