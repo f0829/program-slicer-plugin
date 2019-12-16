@@ -4,15 +4,15 @@
       label="Program_Slicer_Feature"
       version="1.0.0.qualifier">
 
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+   <description url="https://github.com/toukir-ahammed/program-slicer-plugin">
+      An Eclipse Plugin for Java Static Program Slicing
    </description>
 
-   <copyright url="http://www.example.com/copyright">
+   <copyright url="https://github.com/toukir-ahammed">
       [Enter Copyright Description here.]
    </copyright>
 
-   <license url="http://www.example.com/license">
+   <license url="https://github.com/toukir-ahammed">
       [Enter License Description here.]
    </license>
 
